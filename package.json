@@ -10,7 +10,8 @@
     "start": "next start",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "npx eslint --fix",
-    "fix:prettier": "npx prettier --write ."
+    "fix:prettier": "npx prettier --write .",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Hiroyuki Yagihashi <hey@hiroy.uk> (https://hiroy.uk)",
@@ -28,7 +29,13 @@
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "typescript": "^4.2.4"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": "eslint --cache --fix",
+    "*.{js,ts,tsx,json,css,md}": "prettier --write"
   }
 }
