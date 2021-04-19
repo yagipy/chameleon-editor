@@ -9,7 +9,7 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2020,
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.json'],
+    project: ['./tsconfig.eslint.json'],
   },
   plugins: ['@typescript-eslint'],
   extends: [
