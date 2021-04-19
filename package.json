@@ -8,9 +8,10 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "fix": "npm run fix:eslint && npm run fix:prettier",
+    "fix": "npm run fix:eslint && npm run fix:tsc && npm run fix:prettier",
     "fix:eslint": "npx eslint --fix",
     "fix:prettier": "npx prettier --write .",
+    "fix:tsc": "npx tsc --noEmit",
     "prepare": "husky install"
   },
   "keywords": [],
