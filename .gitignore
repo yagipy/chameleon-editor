@@ -3,6 +3,3 @@ node_modules
 .idea
 .eslintcache
 pkg
-
-# tmp
-markdown-parser
