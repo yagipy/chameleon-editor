@@ -18,9 +18,6 @@ jobs:
           toolchain: 1.51.0
           target: wasm32-unknown-unknown
 
-      - name: Build Cargo
-        run: cd markdown-parser && cargo build --lib --release --target wasm32-unknown-unknown
-
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
