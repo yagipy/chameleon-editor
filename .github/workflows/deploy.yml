@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-            submodule: true
+          submodules: recursive
 
       - name: Setup Rust
         uses: actions-rs/toolchain@v1
@@ -21,8 +21,8 @@ jobs:
       - name: Install wasm-pack
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-#      - name: Build markdown-parser
-#        run: cd markdown-parser && ls wasm-pack build
+      - name: Build markdown-parser
+        run: wasm-pack build markdown-parser
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -38,7 +38,7 @@ jobs:
       - name: Publish
         uses: netlify/actions/cli@master
         with:
-          args: deploy --prod
+          args: deploy --dir=.next --prod
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

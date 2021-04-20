@@ -5,6 +5,22 @@ import { ReactElement, useState } from 'react'
 let wasmContainer: { pulldown_cmark: typeof pulldown_cmark }
 import('../../markdown-parser/pkg').then((wasm) => (wasmContainer = wasm))
 
+const sampleText =
+  '# Cameleon editor\n' +
+  '## One Source, All Usecase.\n' +
+  '- マインドマップ、スライド、Todoリストの形式に対応予定\n' +
+  '  - そのままPDF化、SVG化も可能\n' +
+  '\n' +
+  '## Feature\n' +
+  '- アプリ by PWA or Electron\n' +
+  '- Lint機能\n' +
+  '- \n' +
+  '\n' +
+  '## Tech Stack\n' +
+  '- パースロジックをRustで記述=>wasmに変換=>jsで呼び出し\n' +
+  '  - パースロジック: https://github.com/ocuto/markdown-parser\n' +
+  '- GitHubActionsでRust=>wasmに変換&デプロイ\n'
+
 type Props = {
   text: string
 }
@@ -20,14 +36,14 @@ const Preview = ({ text }: Props): ReactElement => {
 }
 
 export default (): ReactElement => {
-  const [text, setText] = useState('')
+  const [text, setText] = useState(sampleText)
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value)
   }
 
   return (
-    <>
+    <div style={{ width: '80%', maxWidth: 1300, margin: '0 auto' }}>
       <div>Chameleon editor</div>
       <div style={{ display: 'flex' }}>
         <textarea
@@ -37,6 +53,6 @@ export default (): ReactElement => {
         />
         <Preview text={wasmContainer?.pulldown_cmark(text)} />
       </div>
-    </>
+    </div>
   )
 }
