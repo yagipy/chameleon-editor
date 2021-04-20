@@ -16,7 +16,8 @@ jobs:
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
       - name: Build markdown-parser
-        run: cd markdown-parser && wasm-pack build
+      - run: cd markdown-parser
+      - run: wasm-pack build
 
       - name: Setup Node
         uses: actions/setup-node@v1
