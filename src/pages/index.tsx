@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { pulldown_cmark } from '../../markdown-parser/pkg'
 import { ReactElement, useState } from 'react'
-
-let wasmContainer: { pulldown_cmark: typeof pulldown_cmark }
-import('../../markdown-parser/pkg').then((wasm) => (wasmContainer = wasm))
+import { pulldown_cmark } from 'markdown-parser'
+import { IPullDownCmark, usePullDownCmark } from '../hooks/usePullDownCmark'
+// let wasmContainer: { pulldown_cmark: typeof pulldown_cmark }
+// import('../../markdown-parser/pkg').then((wasm) => (wasmContainer = wasm))
 
 const sampleText =
   '# Cameleon editor\n' +
@@ -35,8 +35,9 @@ const Preview = ({ text }: Props): ReactElement => {
   )
 }
 
-export default (): ReactElement => {
+const Home = (): ReactElement => {
   const [text, setText] = useState(sampleText)
+  const instance: IPullDownCmark | null = usePullDownCmark()
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value)
@@ -51,8 +52,10 @@ export default (): ReactElement => {
           onChange={handleChange}
           style={{ width: 500, height: 500, marginRight: 100 }}
         />
-        <Preview text={wasmContainer?.pulldown_cmark(text)} />
+        <Preview text={instance?.pulldown_cmark(text) ?? ''} />
       </div>
     </div>
   )
 }
+
+export default Home
