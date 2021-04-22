@@ -7,10 +7,14 @@ type Props = {
 
 export const PreviewSelect = (props: Props) => {
   return (
-    <select onChange={props.handleSelect}>
-      {Object.keys(previewTypes).map((previewType) => {
-        return <option value={previewType}>{previewType}</option>
-      })}
-    </select>
+    <div style={{ display: 'flex' }}>
+      <span style={{ marginRight: 8 }}>preview type is</span>
+      <select onChange={props.handleSelect}>
+        {Object.keys(previewTypes).map((previewType) => {
+          return <option value={previewType}>{previewType}</option>
+        })}
+      </select>
+      <span>.</span>
+    </div>
   )
 }
