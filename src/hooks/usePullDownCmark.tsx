@@ -8,11 +8,10 @@ export type IPullDownCmark = {
 export const usePullDownCmark = () => {
   const [state, setState] = useState<IPullDownCmark | null>(null)
   useEffect(() => {
-    const loadWasm = async () => {
+    ;(async () => {
       const wasmContainer = await import('markdown-parser')
       setState(wasmContainer)
-    }
-    loadWasm()
+    })()
   }, [])
   return state
 }

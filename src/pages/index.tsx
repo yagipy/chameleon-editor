@@ -1,10 +1,8 @@
 import * as React from 'react'
-import { ReactElement, useEffect, useRef, useState } from 'react'
-import { IPullDownCmark, usePullDownCmark } from '../hooks/usePullDownCmark'
-import { Transformer } from 'markmap-lib'
-import * as markmap from 'markmap-view'
+import { ReactElement, useState } from 'react'
 import { Preview } from '../components/Preview'
-import { stringToEnum } from '../lib/utils/converter'
+import { IPreviewTypes, previewTypes } from '../models/IPreviewTypes'
+import { PreviewSelect } from '../components/PreviewSelect'
 
 const sampleText =
   '# Cameleon editor\n' +
@@ -12,67 +10,33 @@ const sampleText =
   '- マインドマップ、スライド、Todoリストの形式に対応予定\n' +
   '- そのままPDF化、SVG化も可能\n' +
   '\n' +
+  '---\n' +
+  '\n' +
   '## Feature\n' +
   '- アプリ by PWA or Electron\n' +
   '- Lint機能\n' +
   '\n' +
+  '---\n' +
+  '\n' +
   '## Tech Stack\n' +
   '- [パースロジック](https://github.com/ocuto/markdown-parser)\n' +
   '  - Rustで記述=>wasmに変換=>jsで呼び出し\n' +
-  '- GitHubActionsでRust=>wasmに変換&デプロイ\n'
-const { Markmap } = markmap
-const transformer = new Transformer()
-
-export const previewTypes = stringToEnum(['DEFAULT', 'MIND_MAP'])
-
-export type PreviewTypes = keyof typeof previewTypes
-
-type PreviewSelectProps = {
-  handleSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
-}
-
-const PreviewSelect = (props: PreviewSelectProps) => {
-  return (
-    <select onChange={props.handleSelect}>
-      {Object.keys(previewTypes).map((previewType) => {
-        return <option value={previewType}>{previewType}</option>
-      })}
-    </select>
-  )
-}
+  '- GitHubActionsでRust=>wasmに変換&デプロイ\n' +
+  '\n' +
+  '---'
 
 const Home = (): ReactElement => {
   const [text, setText] = useState(sampleText)
-  const [mark, setMark] = useState<markmap.Markmap>()
-  const [currentPreviewType, setCurrentPPreviewType] = useState<PreviewTypes>(
+  const [currentPreviewType, setCurrentPPreviewType] = useState<IPreviewTypes>(
     previewTypes.DEFAULT,
   )
-  const instance: IPullDownCmark | null = usePullDownCmark()
-  const { root } = transformer.transform(text)
-  const mindmapSvgRef = useRef(null)
-
-  useEffect(() => {
-    if (mindmapSvgRef.current) {
-      setMark(
-        Markmap.create(
-          (mindmapSvgRef.current as unknown) as SVGElement,
-          undefined,
-          root,
-        ),
-      )
-    }
-  }, [currentPreviewType])
-
-  useEffect(() => {
-    mark?.setData(root)
-  }, [text])
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value)
   }
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrentPPreviewType(previewTypes[event.target.value as PreviewTypes])
+    setCurrentPPreviewType(previewTypes[event.target.value as IPreviewTypes])
   }
 
   return (
@@ -85,11 +49,7 @@ const Home = (): ReactElement => {
           onChange={handleChange}
           style={{ width: 500, height: 500, marginRight: 100 }}
         />
-        {currentPreviewType === previewTypes.DEFAULT ? (
-          <Preview text={instance?.pulldown_cmark(text) ?? ''} />
-        ) : (
-          <svg ref={mindmapSvgRef} width={600} height={600} />
-        )}
+        <Preview text={text} type={currentPreviewType} />
       </div>
     </div>
   )
