@@ -1,35 +1,31 @@
 import * as React from 'react'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Preview } from '../components/Preview'
 import { IPreviewTypes, previewTypes } from '../models/IPreviewTypes'
 import { PreviewSelect } from '../components/PreviewSelect'
 import { ColumnsLayoutSelect } from '../components/ColumnLayoutSelect'
 import { columnLayouts, IColumnLayouts } from '../models/ColumnLayouts'
+import { LocalStorageKeys } from '../lib/LocalStorageKeys'
 
 const sampleText =
   '# Cameleon editor\n' +
   '## One Source, All Usecase.\n' +
-  '- マインドマップ、スライド、Todoリストの形式に対応予定\n' +
-  '- そのままPDF化、SVG化も可能\n' +
-  '---\n' +
-  '\n' +
-  '## Feature\n' +
-  '- アプリ by PWA or Electron\n' +
-  '- Lint機能\n' +
+  '- マインドマップ、スライドの形式に対応\n' +
+  '- そのままPDF化、SVG化も可能(予定)\n' +
   '---\n' +
   '\n' +
   '## Tech Stack\n' +
-  '- [パースロジック](https://github.com/ocuto/markdown-parser)\n' +
+  '- [パースロジック](https://github.com/yagipy/markdown-parser)\n' +
   '  - Rustで記述=>wasmに変換=>jsで呼び出し\n' +
   '- GitHubActionsでRust=>wasmに変換&デプロイ\n' +
   '---\n' +
   '\n' +
   '## Welcome to Contribute!\n' +
-  '- マークダウンパーサー: https://github.com/ocuto/markdown-parser\n' +
-  '- Webクライアント: 近日公開\n'
+  '- マークダウンパーサー: https://github.com/yagipy/markdown-parser\n' +
+  '- Webクライアント: https://github.com/yagipy/chameleon-editor\n'
 
 const Home = (): ReactElement => {
-  const [text, setText] = useState(sampleText)
+  const [text, setText] = useState('')
   const [currentPreviewType, setCurrentPPreviewType] = useState<IPreviewTypes>(
     previewTypes.DEFAULT,
   )
@@ -38,8 +34,13 @@ const Home = (): ReactElement => {
     setCurrentColumnLayout,
   ] = useState<IColumnLayouts>(columnLayouts.TWO_COLUMNS)
 
+  useEffect(() => {
+    setText(localStorage.getItem(LocalStorageKeys.text) ?? sampleText)
+  }, [])
+
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value)
+    localStorage.setItem(LocalStorageKeys.text, event.target.value)
   }
 
   const handleSelectPreviewType = (
